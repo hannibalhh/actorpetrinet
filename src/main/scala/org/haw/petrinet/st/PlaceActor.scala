@@ -14,7 +14,10 @@ class PlaceActor extends Actor with Log{
    */
   def receive = {
     // data
-    case Token => context.become(carrying(1,HashMap(),Set()))
+    case Token => {
+      log.debug("new token -> " + 1)
+      context.become(carrying(1,HashMap(),Set()))
+    }
     
     // actions
     case CanYouReserveTokens(i:Int) if i <= 0 =>  {
@@ -29,9 +32,13 @@ class PlaceActor extends Actor with Log{
   
   def carrying(tokens:Int,reservedTokens:Map[ActorRef,Int],neighbours:Set[/->]):Receive = {
     // data
-    case Token => context.become(carrying(tokens+1,reservedTokens,neighbours))
+    case Token => {
+      log.debug("new token -> " + tokens)
+      context.become(carrying(tokens+1,reservedTokens,neighbours))
+    }
     
     // actions
+    // phase 1
     case CanYouReserveTokens(i:Int) if i <= tokens => {
       log.debug("TokensReserved carrying" + i)
       sender ! TokensReserved
@@ -42,15 +49,23 @@ class PlaceActor extends Actor with Log{
       sender ! TokensNotReserved
     }
     
+    // phase 2 
     case ITakeMyReservedTokens => {
       log.debug("ITakeMyReservedTokens")
-      reservedTokens-(sender)
-      sender ! ItsYours
+      if (reservedTokens.contains(sender)){
+    	  sender ! TokensAreYours
+    	  context.become(carrying(tokens,reservedTokens-(sender),neighbours))
+      }
+      else
+         log.debug("ITakeMyReservedTokens -> don't contains")
     }
     case IDontTakeMyReservedTokens => {
-      log.debug("IDontTakeMyReservedTokens")
-      tokens + reservedTokens(sender)
-      reservedTokens-(sender)
+      log.debug("IDontTakeMyReservedTokens")    
+      if (reservedTokens.contains(sender)){    	  
+    	  context.become(carrying(tokens + reservedTokens(sender),reservedTokens-(sender),neighbours))
+      }
+      else
+         log.debug("IDontTakeMyReservedTokens -> don't contains")
     }
     
   }

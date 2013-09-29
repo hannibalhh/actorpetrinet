@@ -2,7 +2,7 @@ package org.haw.petrinet.actor.additions
 
 import akka.actor.ActorContext
 import akka.actor.Actor
-import org.haw.petrinet.st.PetrinetActions.Trigger
+import org.haw.petrinet.st.PetrinetActions.Turn
 import scala.concurrent.duration.FiniteDuration
 
 /**
@@ -17,7 +17,7 @@ trait Delay extends Actor{
    * responseactor.delay = 50
    */
    import scala.concurrent.duration._
-   val delay = 30 millis //context.system.settings.config.getInt(delayname + ".delay")
+   val delay = 80 millis //context.system.settings.config.getInt(delayname + ".delay")
 
     /**
    * A delay is realized as a future with after pattern
@@ -31,7 +31,7 @@ trait Delay extends Actor{
     after(d, using = context.system.scheduler) {
       import scala.concurrent.Future
       Future {
-        self ! Trigger
+        self ! Turn
       }
     }
   }

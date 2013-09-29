@@ -7,9 +7,9 @@ object PetrinetActions {
   case object Thanks
   
   /**
-   * Start message of after init data, response after enaugh Thanks messages 
+   * Turn message of after init data: response after enaugh Thanks messages or delay  
    */
-  case object Start
+  case object Turn
   
   /**
    * start of first phase of two phase commit: CanYouReserveTokens
@@ -39,16 +39,7 @@ object PetrinetActions {
   /**
    * end of second phase of two phase commit: answer of ITakeMyReservedTokens
    */
-  case object ItsYours
-  
-  /**
-   * end of second phase of two phase commit: post conditions places get new tokens
-   */
-  case class YouGetNewTokens(i:Int)
-  
-  /**
-   * Trigger message for delay to itself or other actors
-   */
-  case object Trigger
+  case object TokensAreYours
+ 
   
 }

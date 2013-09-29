@@ -39,7 +39,7 @@ class PetrinetActor extends Actor with Log {
     case Thanks => {
       log.debug("ready to start petrinet ")
       for (transition <- n.t.transitions)
-        context.child(transition.label.name).get ! Start
+        context.child(transition.label.name).get ! Turn
       context.become(receive)
     }
     case n: N => log.error("TODO stashing of new petrinets") /* TODO stashing */
