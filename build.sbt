@@ -4,7 +4,7 @@ version := "0.1"
 
 scalaVersion := "2.10.2"
 
-mainClass in (Compile, run) := Some("test.MyDataTest")
+mainClass in (Compile, run) := Some("org.haw.petrinet.st.Actorpetrinet")
 
 libraryDependencies += "com.typesafe.akka" % "akka-actor_2.10" % "2.2.0"
 
